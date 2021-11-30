@@ -24,7 +24,7 @@ public class Solution10_3_4 {
                                                String destFilename, String descEnc) {
 
         InputStreamReader inputStreamReader;
-        Reader fis;
+        OutputStreamWriter outputStreamWriter;
         try {
             InputStream inputStream= new FileInputStream(sourceFilename);
             inputStreamReader = new InputStreamReader(inputStream, sourceEnc);
@@ -37,33 +37,29 @@ public class Solution10_3_4 {
             return false;
         }
 
-        OutputStreamWriter outputStreamWriter;
-        Writer fos;
+
         try {
             OutputStream outputStream= new FileOutputStream(destFilename);
             outputStreamWriter = new OutputStreamWriter(outputStream, descEnc);
+            outputStreamWriter.write(String.valueOf(inputStreamReader));
 
         } catch (FileNotFoundException e) {
             System.out.println("Файл-копию не удалось найти для записи");
             return false;
         } catch (UnsupportedEncodingException e) {
-            System.out.println("Указана неизвестная кодировка записываемого файла-источника");
+            System.out.println("Указана неизвестная кодировка записываемого файла");
             return false;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-/*
-        try {
-            OutputStream outputStream = new FileOutputStream(destFilename);
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, descEnc);
-            outputStreamWriter.write(String.valueOf(inputStreamReader));
-        }
-*/
+
         /* все открылось, можно копировать */
 
         char[] buffer = new char[1024];
         int length;
         try {
-            while ((length = fis.read(buffer)) > 0) {
-                fos.write(buffer, 0, length);
+            while ((length = inputStreamReader.read(buffer)) > 0) {
+                outputStreamWriter.write(buffer, 0, length);
             }
         } catch (IOException ex){
             System.out.println("При копировании возникла ошибка");
@@ -71,8 +67,8 @@ public class Solution10_3_4 {
         }
         finally {
             try {
-                fis.close();
-                fos.close();
+                inputStreamReader.close();
+                outputStreamWriter.close();
             }
             catch (IOException ex){
                 System.out.println("Закрыть потоки не удалось...");
@@ -84,48 +80,3 @@ public class Solution10_3_4 {
 }
 
 
-/*
-InputStreamReader inputStreamReader;
-Writer fos;
-try {
-    InputStream inputStream= new FileInputStream(sourceFilename);
-    inputStreamReader = new InputStreamReader(inputStream, sourceEnc);
-
-} catch (FileNotFoundException e) {
-    System.out.println("Файл-источник не удалось найти для чтения");
-    return false;
-} catch (UnsupportedEncodingException e) {
-    System.out.println("Указана неизвестная кодировка файла-источника");
-    return false;
-}
-
-try {
-    OutputStream outputStream = new FileOutputStream(destFilename);
-    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, descEnc);
-    outputStreamWriter.write(String.valueOf(inputStreamReader));
-
-
-        Reader fis = null;
-        Writer fos = null;
-        try {
-            fis = new InputStreamReader(new FileInputStream(new File(sourceFilename)), sourceEnc);
-        } catch (FileNotFoundException e) {
-            System.out.println("Файл-источник не удалось найти для чтения");
-            return false;
-        } catch (UnsupportedEncodingException e) {
-            System.out.println("Указана неизвестная кодировка файла-источника");
-            return false;
-        }
-
-        try {
-            fos = new OutputStreamWriter(new FileOutputStream(new File(sourceFilename)), sourceEnc);
-        } catch (UnsupportedEncodingException e) {
-            System.out.println("Указана неизвестная кодировка файла-источника");
-            return false;
-        }
-        catch (IOException e) {
-            System.out.println("Файл-копию не удалось найти для записи");
-            return false;
-        }
-
- */
