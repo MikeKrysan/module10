@@ -22,29 +22,41 @@ public class Solution10_3_4 {
        а рассказывает по-русски, почему не получилось */
     private static boolean copyFileUsingStream(String sourceFilename, String sourceEnc,
                                                String destFilename, String descEnc) {
-        Reader fis = null;
-        Writer fos = null;
+
+        InputStreamReader inputStreamReader;
+        Reader fis;
         try {
-            fis = new InputStreamReader(new FileInputStream(new File(sourceFilename)), sourceEnc);
+            InputStream inputStream= new FileInputStream(sourceFilename);
+            inputStreamReader = new InputStreamReader(inputStream, sourceEnc);
+
         } catch (FileNotFoundException e) {
             System.out.println("Файл-источник не удалось найти для чтения");
             return false;
         } catch (UnsupportedEncodingException e) {
-            System.out.println("Указана неизвестная кодировка файла-источника");
+            System.out.println("Указана неизвестная кодировка записывающего файла-источника");
             return false;
         }
 
+        OutputStreamWriter outputStreamWriter;
+        Writer fos;
         try {
-            fos = new OutputStreamWriter(new FileOutputStream(new File(sourceFilename)), sourceEnc);
-        } catch (UnsupportedEncodingException e) {
-            System.out.println("Указана неизвестная кодировка файла-источника");
-            return false;
-        }
-        catch (IOException e) {
+            OutputStream outputStream= new FileOutputStream(destFilename);
+            outputStreamWriter = new OutputStreamWriter(outputStream, descEnc);
+
+        } catch (FileNotFoundException e) {
             System.out.println("Файл-копию не удалось найти для записи");
             return false;
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Указана неизвестная кодировка записываемого файла-источника");
+            return false;
         }
-
+/*
+        try {
+            OutputStream outputStream = new FileOutputStream(destFilename);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, descEnc);
+            outputStreamWriter.write(String.valueOf(inputStreamReader));
+        }
+*/
         /* все открылось, можно копировать */
 
         char[] buffer = new char[1024];
@@ -70,3 +82,50 @@ public class Solution10_3_4 {
         return true;
     }
 }
+
+
+/*
+InputStreamReader inputStreamReader;
+Writer fos;
+try {
+    InputStream inputStream= new FileInputStream(sourceFilename);
+    inputStreamReader = new InputStreamReader(inputStream, sourceEnc);
+
+} catch (FileNotFoundException e) {
+    System.out.println("Файл-источник не удалось найти для чтения");
+    return false;
+} catch (UnsupportedEncodingException e) {
+    System.out.println("Указана неизвестная кодировка файла-источника");
+    return false;
+}
+
+try {
+    OutputStream outputStream = new FileOutputStream(destFilename);
+    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, descEnc);
+    outputStreamWriter.write(String.valueOf(inputStreamReader));
+
+
+        Reader fis = null;
+        Writer fos = null;
+        try {
+            fis = new InputStreamReader(new FileInputStream(new File(sourceFilename)), sourceEnc);
+        } catch (FileNotFoundException e) {
+            System.out.println("Файл-источник не удалось найти для чтения");
+            return false;
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Указана неизвестная кодировка файла-источника");
+            return false;
+        }
+
+        try {
+            fos = new OutputStreamWriter(new FileOutputStream(new File(sourceFilename)), sourceEnc);
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Указана неизвестная кодировка файла-источника");
+            return false;
+        }
+        catch (IOException e) {
+            System.out.println("Файл-копию не удалось найти для записи");
+            return false;
+        }
+
+ */
