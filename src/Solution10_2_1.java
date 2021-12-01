@@ -49,8 +49,16 @@ public class Solution10_2_1 {
         for(int i=0; i<str.length(); i++) {
             System.out.println(str.charAt(i));
         }
-        //Accessing element at greater than the length of the String
-        System.out.println(str.charAt(18));
+        int a = 20;
+        try {
+            if (str.charAt(a) > str.length()) {
+                throw new MyStringIndexOutOfBoundsException("Вы превысили значение символа, входящего в строку");
+            }
+            //Accessing element at greater than the length of the String
+            System.out.println(str.charAt(a));
+        } catch(MyStringIndexOutOfBoundsException b){
+            System.err.println("Произошла ошибка!");
+        }
 
     }
 }
